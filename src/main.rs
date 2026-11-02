@@ -7,6 +7,7 @@ mod parser;
 mod render;
 
 use crate::audio::audio_handler::Audio;
+use crate::menu::keybinds;
 use crate::menu::menu_handler::{AppState, Menu};
 use crate::render::{RendererData, render_init};
 use minifb::{Key, KeyRepeat, Window, WindowOptions};

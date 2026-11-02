@@ -1,5 +1,6 @@
 use minifb::Key;
 use std::collections::HashMap;
+use std::path::PathBuf;
 
 #[derive(Clone, Hash, PartialEq, Eq)]
 pub enum Action {
@@ -57,6 +58,12 @@ pub fn key_for(action: &Action, bindings: &HashMap<Action, Key>) -> Key {
 }
 
 //TODO:
+
+//function that checks if keybinding file is there, and then either returns keybindings from file or
+//generates default keybinds
+pub fn load_keybinds(filepath: PathBuf) -> HashMap<Action, Key> {
+    generate_default_keybindings()
+}
 
 //get hashmap from file
 //

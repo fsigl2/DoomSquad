@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::{fs, path::Path};
 
 use crate::{
@@ -16,10 +17,11 @@ use super::map::Map;
 use super::player::Player;
 use crate::game::damage_calculation::damage_check;
 use crate::game::interactables::InteractableEvent::*;
+use crate::menu::keybinds::{Action, generate_default_keybindings};
 use crate::parser::entities_parser::parse_entities;
 use crate::parser::interactables_parser::*;
 use crate::parser::player_parser::parse_player_position;
-use minifb::Window;
+use minifb::{Key, Window};
 
 const DESPAWN_TIME: i32 = 300;
 const MAP_GRID_CELL_SIZE: f64 = 64.0;
@@ -36,6 +38,7 @@ pub struct Game {
     pub projectile_that_hit: Vec<usize>,
     pub map_index: usize,
     pub last_map_index: usize,
+    pub keybindings: HashMap<Action, Key>,
 }
 
 impl Game {
@@ -50,6 +53,7 @@ impl Game {
             }
         };
         entries.sort_by_key(|e| e.path());
+
         if let Some(entry) = entries.first() {
             // we initially load the first map
             let path_buf = entry.path();
@@ -73,6 +77,7 @@ impl Game {
                 projectile_that_hit: Vec::new(),
                 map_index: 0,
                 last_map_index: 0,
+                keybindings: generate_default_keybindings(),
             };
 
             Some(game)
@@ -82,6 +87,8 @@ impl Game {
     }
 
     pub fn update(&mut self, window: &Window, renderer_data: &RendererData, audio: &mut Audio) {
+        //TODO: check keybindings here
+
         //update all interactables and add possible spawn events
         let mut interactables = std::mem::take(&mut self.interactables);
         let mut interactables_spawns = Vec::new();

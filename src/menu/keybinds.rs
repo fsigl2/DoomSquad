@@ -1,9 +1,7 @@
-//TODO:
-
 use minifb::Key;
 use std::collections::HashMap;
 
-#[derive(Hash, PartialEq, Eq)]
+#[derive(Clone, Hash, PartialEq, Eq)]
 pub enum Action {
     MoveForward,
     MoveLeft,
@@ -57,6 +55,8 @@ pub fn key_for(action: &Action, bindings: &HashMap<Action, Key>) -> Key {
         .copied()
         .expect("Action should have a binding")
 }
+
+//TODO:
 
 //get hashmap from file
 //

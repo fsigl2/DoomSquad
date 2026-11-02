@@ -3,6 +3,7 @@
 //! This module manages all the non-gameplay screens, such as the Main Menu,
 //! the Pause Screen, and the Game Over screen. It handles drawing buttons and text,
 //! processing mouse clicks, and taking care of saving and loading the player's progress.
+// TODO: menu handling thing here
 
 use font8x8::{BASIC_FONTS, UnicodeFonts};
 use minifb::{Key, KeyRepeat, MouseButton, MouseMode, Window};
@@ -95,6 +96,7 @@ impl Menu {
         );
 
         // Define button layouts
+        // TODO: add button
         let btn_start = ButtonDef {
             x: 230,
             y: 160,

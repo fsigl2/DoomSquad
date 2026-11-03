@@ -8,12 +8,15 @@ use crate::game::entity_behaviour::{
     player_bullet_behaviour, ranged_enemy_behaviour, red_barrel_behaviour,
     summoner_enemy_behaviour, weak_enemy_behaviour,
 };
+use crate::menu::keybinds::Action;
+use crate::menu::keybinds::key_for;
 
 use crate::game::map::{Map, Point};
 use crate::game::movement::Mover;
 use crate::render::RendererData;
 use crate::render::sprites::Sprite;
 
+use std::collections::HashMap;
 use std::fmt;
 
 pub const ENTITY_DEFAULT_VIEW_HEIGHT: f64 = 15.0;
@@ -193,6 +196,7 @@ impl Entity {
     //updates every tick
     pub fn update(
         &mut self,
+        keybindings: &HashMap<Action, Key>,
         window: &Window,
         map: &Map,
         player_mover: &Mover,
@@ -201,7 +205,7 @@ impl Entity {
     ) -> Vec<EntityEvent> {
         //collect all Spawn events for gamestate
         let mut events: Vec<EntityEvent> = Vec::new();
-        if window.is_key_pressed(Key::L, minifb::KeyRepeat::No) {
+        if window.is_key_pressed(key_for(&Action::Lock, &keybindings), minifb::KeyRepeat::No) {
             self.movement_locked = !self.movement_locked;
         }
 

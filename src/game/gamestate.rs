@@ -109,7 +109,14 @@ impl Game {
 
         //update all entites and add possible spawn events
         for entity in &mut self.entities {
-            let event = entity.update(window, &self.map, &self.player.mover, renderer_data, audio);
+            let event = entity.update(
+                &self.keybindings,
+                window,
+                &self.map,
+                &self.player.mover,
+                renderer_data,
+                audio,
+            );
             entity_spawns.extend(event);
         }
 

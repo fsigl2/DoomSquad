@@ -1,6 +1,8 @@
 use super::map::Map;
 use crate::game::generate_entities::generate_entities;
 use crate::game::player::LastInputDirection::*;
+use crate::menu::keybinds::Action;
+use crate::menu::keybinds::key_for;
 use crate::{
     SCREEN_HEIGHT,
     audio::audio_handler::Audio,
@@ -22,6 +24,7 @@ use crate::{
 //TODO: minifb key is used. need to figure out a way to maybe save these into a hashmap (or call them
 //out of hashmap and into minifb)
 use minifb::{Key, KeyRepeat, MouseButton, MouseMode, Window};
+use std::collections::HashMap;
 use std::f64::consts::PI;
 
 const ROTATION_SPEED_MOUSE: f64 = 2.0;
@@ -169,6 +172,7 @@ impl Player {
     //updates every tick
     pub fn update(
         &mut self,
+        keybindings: &HashMap<Action, Key>,
         window: &Window,
         map: &Map,
         renderer_data: &RendererData,
@@ -182,7 +186,7 @@ impl Player {
         }
 
         //swap between aim_mode and not, during aim mode sense is lowered
-        if window.is_key_pressed(Key::E, KeyRepeat::No) {
+        if window.is_key_pressed(key_for(&Action::FineAiming, &keybindings), KeyRepeat::No) {
             match self.aim_mode {
                 true => self.aim_mode = false,
                 false => self.aim_mode = true,

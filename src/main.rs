@@ -58,7 +58,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     let mut game = game::Game::new_game(&renderer_data).unwrap();
-    save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
     let mut audio = Audio::init();
     let mut menu = Menu::new();
 

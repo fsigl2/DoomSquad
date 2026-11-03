@@ -26,11 +26,13 @@ const COL_BTN_HOVER: u32 = 0xAA0000;
 const COL_TEXT_WHITE: u32 = 0xFFFFFF;
 
 /// Dictates the high-level routing in the `main.rs` loop.
+/// TODO: add keybind state here (settings)
 pub enum AppState {
     StartScreen,
     Playing,
     GameOver,
     GamePaused,
+    Settings,
     Quit,
 }
 
@@ -96,17 +98,16 @@ impl Menu {
         );
 
         // Define button layouts
-        // TODO: add button
         let btn_start = ButtonDef {
             x: 230,
-            y: 160,
+            y: 130,
             w: 340,
             h: 50,
             text: "[1] NEW GAME".to_string(),
         };
         let btn_load = ButtonDef {
             x: 230,
-            y: 230,
+            y: 195,
             w: 340,
             h: 50,
             text: "[2] LOAD MAP".to_string(),
@@ -119,15 +120,23 @@ impl Menu {
         };
         let btn_audio = ButtonDef {
             x: 230,
-            y: 300,
+            y: 260,
             w: 340,
             h: 50,
             text: audio_text.to_string(),
         };
+        // TODO: add/finish button
+        let btn_settings = ButtonDef {
+            x: 230,
+            y: 325,
+            w: 340,
+            h: 50,
+            text: "[C] EDIT KEYBINDS".to_string(),
+        };
 
         let btn_quit = ButtonDef {
             x: 230,
-            y: 370,
+            y: 390,
             w: 340,
             h: 50,
             text: "[ESC] QUIT GAME".to_string(),
@@ -155,6 +164,11 @@ impl Menu {
         if self.draw_flat_button(buffer, &btn_audio, mx, my) && clicked || click3 {
             audio.set_muted(!audio.is_muted);
             return AppState::StartScreen;
+        }
+
+        //TODO: button set here
+        if self.draw_flat_button(buffer, &btn_settings, mx, my) && clicked {
+            return AppState::Settings;
         }
 
         if self.draw_flat_button(buffer, &btn_quit, mx, my) && clicked {
@@ -296,6 +310,65 @@ impl Menu {
         }
 
         AppState::GamePaused
+    }
+
+    // TODO: make edit appstate here
+    pub fn update_and_draw_settings_menu(
+        &mut self,
+        window: &mut Window,
+        buffer: &mut [u32],
+        game: &mut Game,
+        renderer_data: &RendererData,
+        audio: &mut Audio,
+    ) -> AppState {
+        // Clear the buffer from the previous frame
+        buffer.fill(COL_BG_MAIN);
+
+        // Fetch user inputs
+        let (mx, my, clicked) = self.get_mouse_state(window);
+        let click1 = window.is_key_pressed(Key::Key1, KeyRepeat::No);
+        let click2 = window.is_key_pressed(Key::Key2, KeyRepeat::No);
+        let click3 = window.is_key_pressed(Key::Key3, KeyRepeat::No);
+
+        // Render titles
+        Self::draw_text_centered(
+            buffer,
+            SCREEN_WIDTH,
+            SCREEN_HEIGHT,
+            "SETTINGS",
+            10,
+            6,
+            COL_TITLE_RED,
+        );
+        Self::draw_text_centered(
+            buffer,
+            SCREEN_WIDTH,
+            SCREEN_HEIGHT,
+            "CLICK A KEYBIND AND ENTER THE NEW ONE ON KEYBOARD",
+            65,
+            2,
+            COL_TEXT_WHITE,
+        );
+
+        // Define button layouts
+        //
+        // TODO: add/finish button
+        let btn_quit = ButtonDef {
+            x: 695,
+            y: 390,
+            w: 100,
+            h: 50,
+            text: "QUIT".to_string(),
+        };
+
+        // Interaction processing
+        //TODO: button set here
+        if self.draw_flat_button(buffer, &btn_quit, mx, my) && clicked {
+            return AppState::StartScreen;
+        }
+
+        // Keep looping in the menu until an action changes the state
+        AppState::Settings
     }
 
     /// Fetches mouse coordinates and performs edge detection (debouncing) for left-clicks.

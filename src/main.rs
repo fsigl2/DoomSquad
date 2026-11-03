@@ -130,6 +130,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
 
+            AppState::Settings => {
+                window.set_cursor_visibility(true);
+
+                if escape_clicked {
+                    break;
+                } else {
+                    app_state = menu.update_and_draw_settings_menu(
+                        &mut window,
+                        &mut buffer,
+                        &mut game,
+                        &renderer_data,
+                        &mut audio,
+                    );
+                }
+            }
+
             AppState::Quit => {
                 break;
             }

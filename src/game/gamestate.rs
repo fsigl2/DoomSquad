@@ -18,6 +18,7 @@ use super::map::Map;
 use super::player::Player;
 use crate::game::damage_calculation::damage_check;
 use crate::game::interactables::InteractableEvent::*;
+use crate::menu::keybinds::KEYBINDS_PATH;
 use crate::menu::keybinds::{Action, generate_default_keybindings, load_keybinds};
 use crate::parser::entities_parser::parse_entities;
 use crate::parser::interactables_parser::*;
@@ -78,7 +79,7 @@ impl Game {
                 projectile_that_hit: Vec::new(),
                 map_index: 0,
                 last_map_index: 0,
-                keybindings: load_keybinds(PathBuf::new()),
+                keybindings: load_keybinds(PathBuf::from(KEYBINDS_PATH)),
             };
 
             Some(game)

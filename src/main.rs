@@ -7,11 +7,12 @@ mod parser;
 mod render;
 
 use crate::audio::audio_handler::Audio;
-use crate::menu::keybinds;
+use crate::menu::keybinds::{self, KEYBINDS_PATH, save_keybinds};
 use crate::menu::menu_handler::{AppState, Menu};
 use crate::render::{RendererData, render_init};
 use minifb::{Key, KeyRepeat, Window, WindowOptions};
 use std::f64::consts::PI;
+use std::path::PathBuf;
 use std::time::Instant;
 
 const SCREEN_WIDTH: usize = 800;
@@ -57,6 +58,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     let mut game = game::Game::new_game(&renderer_data).unwrap();
+    save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
     let mut audio = Audio::init();
     let mut menu = Menu::new();
 

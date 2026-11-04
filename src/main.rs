@@ -7,7 +7,7 @@ mod parser;
 mod render;
 
 use crate::audio::audio_handler::Audio;
-use crate::menu::keybinds::{self, KEYBINDS_PATH, save_keybinds};
+use crate::menu::keybinds::{self, KEYBINDS_PATH, load_keybinds, save_keybinds};
 use crate::menu::menu_handler::{AppState, Menu};
 use crate::render::{RendererData, render_init};
 use minifb::{Key, KeyRepeat, Window, WindowOptions};
@@ -70,6 +70,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             AppState::StartScreen => {
                 window.set_cursor_visibility(true);
 
+                save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
                 if escape_clicked {
                     break;
                 } else {
@@ -131,17 +132,27 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             AppState::Settings {
-                waiting_for: Some(_),
+                waiting_for: Some(action),
             } => {
                 window.set_cursor_visibility(true);
 
-                app_state = menu.update_and_draw_settings_menu(
-                    &mut window,
-                    &mut buffer,
-                    &mut game,
-                    &renderer_data,
-                    &mut audio,
-                );
+                //                app_state = menu.update_and_draw_settings_menu(
+                //                    &mut window,
+                //                    &mut buffer,
+                //                    &mut game,
+                //                    &renderer_data,
+                //                    &mut audio,
+                //                );
+                //
+
+                app_state = if let Some(key) = window.get_keys_pressed(KeyRepeat::No).first() {
+                    game.keybindings.insert(action, *key);
+                    AppState::Settings { waiting_for: None }
+                } else {
+                    AppState::Settings {
+                        waiting_for: Some(action),
+                    }
+                }
             }
 
             AppState::Settings { waiting_for: None } => {

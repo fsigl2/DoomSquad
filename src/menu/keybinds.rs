@@ -107,7 +107,7 @@ pub fn save_keybinds(new_map: &HashMap<Action, Key>, filepath: PathBuf) {
     }
 }
 
-const ALL_ACTIONS: &[Action] = &[
+pub const ALL_ACTIONS: &[Action] = &[
     Action::MoveForward,
     Action::MoveLeft,
     Action::MoveBack,

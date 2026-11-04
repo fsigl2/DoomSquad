@@ -8,9 +8,12 @@
 use font8x8::{BASIC_FONTS, UnicodeFonts};
 use minifb::{Key, KeyRepeat, MouseButton, MouseMode, Window};
 use std::fs;
+use std::path::PathBuf;
 
 use crate::audio::audio_handler::Audio;
 use crate::game::gamestate::Game;
+use crate::keybinds::Action;
+use crate::menu::keybinds::{KEYBINDS_PATH, save_keybinds};
 use crate::render::RendererData;
 
 const SCREEN_WIDTH: usize = 800;
@@ -32,7 +35,7 @@ pub enum AppState {
     Playing,
     GameOver,
     GamePaused,
-    Settings,
+    Settings { waiting_for: Option<Action> },
     Quit,
 }
 
@@ -76,6 +79,7 @@ impl Menu {
         let click1 = window.is_key_pressed(Key::Key1, KeyRepeat::No);
         let click2 = window.is_key_pressed(Key::Key2, KeyRepeat::No);
         let click3 = window.is_key_pressed(Key::Key3, KeyRepeat::No);
+        let click4 = window.is_key_pressed(Key::Key4, KeyRepeat::No);
 
         // Render titles
         Self::draw_text_centered(
@@ -131,7 +135,7 @@ impl Menu {
             y: 325,
             w: 340,
             h: 50,
-            text: "[C] EDIT KEYBINDS".to_string(),
+            text: "[4] EDIT KEYBINDS".to_string(),
         };
 
         let btn_quit = ButtonDef {
@@ -167,8 +171,8 @@ impl Menu {
         }
 
         //TODO: button set here
-        if self.draw_flat_button(buffer, &btn_settings, mx, my) && clicked {
-            return AppState::Settings;
+        if self.draw_flat_button(buffer, &btn_settings, mx, my) && clicked || click4 {
+            return AppState::Settings { waiting_for: None };
         }
 
         if self.draw_flat_button(buffer, &btn_quit, mx, my) && clicked {
@@ -326,9 +330,6 @@ impl Menu {
 
         // Fetch user inputs
         let (mx, my, clicked) = self.get_mouse_state(window);
-        let click1 = window.is_key_pressed(Key::Key1, KeyRepeat::No);
-        let click2 = window.is_key_pressed(Key::Key2, KeyRepeat::No);
-        let click3 = window.is_key_pressed(Key::Key3, KeyRepeat::No);
 
         // Render titles
         Self::draw_text_centered(
@@ -344,14 +345,26 @@ impl Menu {
             buffer,
             SCREEN_WIDTH,
             SCREEN_HEIGHT,
-            "CLICK A KEYBIND AND ENTER THE NEW ONE ON KEYBOARD",
+            "CLICK AN ACTION AND ENTER THE NEW ONE ON KEYBOARD",
             65,
-            2,
+            1,
             COL_TEXT_WHITE,
         );
 
-        // Define button layouts
-        //
+        let btn_change_move_forward = ButtonDef {
+            x: 100,
+            y: 100,
+            w: 50,
+            h: 50,
+            text: "MoveForward".to_string(),
+        };
+
+        // Interaction processing
+        //TODO: button set here
+        if self.draw_flat_button(buffer, &btn_change_move_forward, mx, my) && clicked {
+            //            game.keybindings.insert(MoveForward, key);
+        }
+
         // TODO: add/finish button
         let btn_quit = ButtonDef {
             x: 695,
@@ -364,11 +377,12 @@ impl Menu {
         // Interaction processing
         //TODO: button set here
         if self.draw_flat_button(buffer, &btn_quit, mx, my) && clicked {
+            save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
             return AppState::StartScreen;
         }
 
         // Keep looping in the menu until an action changes the state
-        AppState::Settings
+        AppState::Settings { waiting_for: None }
     }
 
     /// Fetches mouse coordinates and performs edge detection (debouncing) for left-clicks.

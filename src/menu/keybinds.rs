@@ -54,15 +54,13 @@ pub fn generate_default_keybindings() -> HashMap<Action, Key> {
     action_map
 }
 
-//helper function thingy
+//helper function that takes binding out of hashmap and formats it so it can be used by minifb
 pub fn key_for(action: &Action, bindings: &HashMap<Action, Key>) -> Key {
     bindings
         .get(action)
         .copied()
         .expect("Action should have a binding")
 }
-
-//TODO:
 
 //function that checks if keybinding file is there, and then either returns keybindings from file or
 //generates default keybinds

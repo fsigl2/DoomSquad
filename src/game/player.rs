@@ -21,8 +21,6 @@ use crate::{
     game::{map::Point, movement::Mover},
     render::RendererData,
 };
-//TODO: minifb key is used. need to figure out a way to maybe save these into a hashmap (or call them
-//out of hashmap and into minifb)
 use minifb::{Key, KeyRepeat, MouseButton, MouseMode, Window};
 use std::collections::HashMap;
 use std::f64::consts::PI;
@@ -413,7 +411,6 @@ impl Player {
         };
 
         //jumping init
-        //TODO: key pressing handled in this file (jumping as example)
         if (window.is_key_pressed(key_for(&Action::Jump, keybindings), KeyRepeat::No)
             && ((!self.is_jumping
                 && (self.mover.foot_level - self.mover.floor_level).abs()
@@ -558,7 +555,6 @@ impl Player {
 
         events
     }
-    //TODO: Figure out how this works, and how it works with keybinding change
     fn save_input(&mut self, keybindings: &HashMap<Action, Key>, window: &Window) {
         if window.is_key_down(key_for(&Action::MoveRight, keybindings)) {
             self.last_input = D;

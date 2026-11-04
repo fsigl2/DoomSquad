@@ -3,7 +3,6 @@
 //! This module manages all the non-gameplay screens, such as the Main Menu,
 //! the Pause Screen, and the Game Over screen. It handles drawing buttons and text,
 //! processing mouse clicks, and taking care of saving and loading the player's progress.
-// TODO: menu handling thing here
 
 use font8x8::{BASIC_FONTS, UnicodeFonts};
 use minifb::{Key, KeyRepeat, MouseButton, MouseMode, Window};
@@ -30,7 +29,6 @@ const COL_BTN_HOVER: u32 = 0xAA0000;
 const COL_TEXT_WHITE: u32 = 0xFFFFFF;
 
 /// Dictates the high-level routing in the `main.rs` loop.
-/// TODO: add keybind state here (settings)
 pub enum AppState {
     StartScreen,
     Playing,
@@ -130,7 +128,7 @@ impl Menu {
             h: 50,
             text: audio_text.to_string(),
         };
-        // TODO: add/finish button
+
         let btn_settings = ButtonDef {
             x: 230,
             y: 325,
@@ -171,7 +169,6 @@ impl Menu {
             return AppState::StartScreen;
         }
 
-        //TODO: button set here
         if self.draw_flat_button(buffer, &btn_settings, mx, my) && clicked || click4 {
             return AppState::Settings { waiting_for: None };
         }
@@ -317,7 +314,6 @@ impl Menu {
         AppState::GamePaused
     }
 
-    // TODO: make edit appstate here
     pub fn update_and_draw_settings_menu(
         &mut self,
         window: &mut Window,
@@ -351,7 +347,7 @@ impl Menu {
             1,
             COL_TEXT_WHITE,
         );
-        //TODO: fix button loop
+
         let mut x_offset: usize = 50;
         let mut y_offset: usize = 100;
         let mut clicked_action: Option<Action> = None;

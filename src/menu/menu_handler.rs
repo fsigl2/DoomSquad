@@ -325,7 +325,6 @@ impl Menu {
         game: &mut Game,
         //renderer_data: &RendererData,
         //audio: &mut Audio,
-        //TODO: add option thing here
     ) -> AppState {
         // Clear the buffer from the previous frame
         buffer.fill(COL_BG_MAIN);
@@ -352,7 +351,7 @@ impl Menu {
             1,
             COL_TEXT_WHITE,
         );
-
+        //TODO: fix button loop
         let mut x_offset: usize = 50;
         let mut y_offset: usize = 100;
         let mut clicked_action: Option<Action> = None;
@@ -380,7 +379,6 @@ impl Menu {
             //save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
         }
 
-        // TODO: add/finish button
         let btn_quit = ButtonDef {
             x: 695,
             y: 390,
@@ -388,13 +386,12 @@ impl Menu {
             h: 50,
             text: "QUIT".to_string(),
         };
-        //TODO: button set here
         if self.draw_flat_button(buffer, &btn_quit, mx, my) && clicked {
             save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
             return AppState::StartScreen;
         }
 
-        if clicked_action.is_none() {
+        if clicked_action.is_some() {
             return AppState::Settings {
                 waiting_for: clicked_action,
             };

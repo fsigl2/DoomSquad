@@ -19,7 +19,7 @@ use super::player::Player;
 use crate::game::damage_calculation::damage_check;
 use crate::game::interactables::InteractableEvent::*;
 use crate::menu::keybinds::KEYBINDS_PATH;
-use crate::menu::keybinds::{Action, generate_default_keybindings, load_keybinds};
+use crate::menu::keybinds::{Action, load_keybinds};
 use crate::parser::entities_parser::parse_entities;
 use crate::parser::interactables_parser::*;
 use crate::parser::player_parser::parse_player_position;

@@ -205,7 +205,7 @@ impl Entity {
     ) -> Vec<EntityEvent> {
         //collect all Spawn events for gamestate
         let mut events: Vec<EntityEvent> = Vec::new();
-        if window.is_key_pressed(key_for(&Action::Lock, &keybindings), minifb::KeyRepeat::No) {
+        if window.is_key_pressed(key_for(&Action::Lock, keybindings), minifb::KeyRepeat::No) {
             self.movement_locked = !self.movement_locked;
         }
 

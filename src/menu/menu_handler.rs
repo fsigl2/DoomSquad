@@ -12,7 +12,8 @@ use std::path::PathBuf;
 
 use crate::audio::audio_handler::Audio;
 use crate::game::gamestate::Game;
-use crate::keybinds::Action;
+use crate::menu::keybinds::ALL_ACTIONS;
+use crate::menu::keybinds::Action;
 use crate::menu::keybinds::{KEYBINDS_PATH, save_keybinds};
 use crate::render::RendererData;
 
@@ -324,6 +325,7 @@ impl Menu {
         game: &mut Game,
         renderer_data: &RendererData,
         audio: &mut Audio,
+        //TODO: add option thing here
     ) -> AppState {
         // Clear the buffer from the previous frame
         buffer.fill(COL_BG_MAIN);
@@ -351,18 +353,28 @@ impl Menu {
             COL_TEXT_WHITE,
         );
 
-        let btn_change_move_forward = ButtonDef {
-            x: 100,
-            y: 100,
-            w: 50,
-            h: 50,
-            text: "MoveForward".to_string(),
-        };
+        let mut x_offset: usize = 50;
+        let mut y_offset: usize = 100;
 
-        // Interaction processing
-        //TODO: button set here
-        if self.draw_flat_button(buffer, &btn_change_move_forward, mx, my) && clicked {
-            //            game.keybindings.insert(MoveForward, key);
+        for action in ALL_ACTIONS {
+            if y_offset >= 400 {
+                y_offset = 100;
+                x_offset += 250;
+            }
+            let btn_placeholder = ButtonDef {
+                x: x_offset,
+                y: y_offset,
+                w: 200,
+                h: 30,
+                text: format!("{:?}", &action),
+            };
+            if self.draw_flat_button(buffer, &btn_placeholder, mx, my) && clicked {
+                return AppState::Settings {
+                    waiting_for: Some(*action),
+                };
+            }
+            y_offset += 35;
+            save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
         }
 
         // TODO: add/finish button
@@ -373,8 +385,6 @@ impl Menu {
             h: 50,
             text: "QUIT".to_string(),
         };
-
-        // Interaction processing
         //TODO: button set here
         if self.draw_flat_button(buffer, &btn_quit, mx, my) && clicked {
             save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));

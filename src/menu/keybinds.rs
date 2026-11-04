@@ -107,6 +107,28 @@ pub fn save_keybinds(new_map: &HashMap<Action, Key>, filepath: PathBuf) {
     }
 }
 
+const ALL_ACTIONS: &[Action] = &[
+    Action::MoveForward,
+    Action::MoveLeft,
+    Action::MoveBack,
+    Action::MoveRight,
+    Action::Sprint,
+    Action::Crouch,
+    Action::Jump,
+    Action::RocketJump,
+    Action::Interact,
+    Action::CrosshairUp,
+    Action::CrosshairDown,
+    Action::CrosshairLeft,
+    Action::CrosshairRight,
+    Action::FineAiming,
+    Action::FireBullet,
+    Action::FireArrow,
+    Action::Godmode,
+    Action::Lock,
+    Action::Escape,
+];
+
 const ALL_KEYS: &[Key] = &[
     Key::Key0,
     Key::Key1,

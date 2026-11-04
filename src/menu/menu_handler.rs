@@ -323,8 +323,8 @@ impl Menu {
         window: &mut Window,
         buffer: &mut [u32],
         game: &mut Game,
-        renderer_data: &RendererData,
-        audio: &mut Audio,
+        //renderer_data: &RendererData,
+        //audio: &mut Audio,
         //TODO: add option thing here
     ) -> AppState {
         // Clear the buffer from the previous frame
@@ -355,6 +355,7 @@ impl Menu {
 
         let mut x_offset: usize = 50;
         let mut y_offset: usize = 100;
+        let mut clicked_action: Option<Action> = None;
 
         for action in ALL_ACTIONS {
             if y_offset >= 400 {
@@ -366,15 +367,17 @@ impl Menu {
                 y: y_offset,
                 w: 200,
                 h: 30,
-                text: format!("{:?}", &action),
+                text: format!("{:?}", action),
             };
+
             if self.draw_flat_button(buffer, &btn_placeholder, mx, my) && clicked {
-                return AppState::Settings {
-                    waiting_for: Some(*action),
-                };
+                clicked_action = Some(*action);
             }
+
             y_offset += 35;
-            save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
+
+            // cannot save here since we would have to return first
+            //save_keybinds(&game.keybindings, PathBuf::from(KEYBINDS_PATH));
         }
 
         // TODO: add/finish button
@@ -391,6 +394,11 @@ impl Menu {
             return AppState::StartScreen;
         }
 
+        if clicked_action.is_none() {
+            return AppState::Settings {
+                waiting_for: clicked_action,
+            };
+        }
         // Keep looping in the menu until an action changes the state
         AppState::Settings { waiting_for: None }
     }
